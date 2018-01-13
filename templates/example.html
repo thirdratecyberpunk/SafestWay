@@ -15,13 +15,12 @@
 
 <div id='map'></div>
 <script>
-
 mapboxgl.accessToken = 'pk.eyJ1IjoibGV3aXNiIiwiYSI6ImNqY2RiaXc3ODBxcXUyeW1tbmdwc2xtZnQifQ.ro-l864DlvMbaZ4Dp5HJ9Q';
 var map = new mapboxgl.Map({
     container: 'map', // container id
     style: 'mapbox://styles/mapbox/dark-v9', //hosted style id
-    center: [-77.38, 39], // starting position
-    zoom: 13 // starting zoom
+    center: [ {{ startLatLong["longitude"] }}, {{ startLatLong["latitude"] }}], // starting position
+    zoom: 15 // starting zoom
 });
 </script>
 
