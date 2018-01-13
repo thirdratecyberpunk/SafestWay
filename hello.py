@@ -20,4 +20,14 @@ def map():
     finishPostcode = urllib2.urlopen("https://api.postcodes.io/postcodes/" + finish).read()
     fpj = json.loads(finishPostcode)
     finishLatLong = {"latitude": fpj["result"]["latitude"], "longitude": fpj["result"]["longitude"]}
+    # requests a route for the given start and end
+    route = urllib2.urlopen("https://api.mapbox.com/directions/v5/mapbox/walking/"
+    + str(startLatLong["longitude"]) + ","
+    + str(startLatLong["latitude"]) + ";"
+    + str(finishLatLong["longitude"]) + ","
+    + str(finishLatLong["latitude"]) + "?"
+    + "alternatives=false&access_token="
+    + "pk.eyJ1IjoibGV3aXNiIiwiYSI6ImNqY2RiaXc3ODBxcXUyeW1tbmdwc2xtZnQifQ.ro-l864DlvMbaZ4Dp5HJ9Q").read()
+    print json.loads(route)
+    # takes the user to the map page
     return render_template('example.html', startLatLong=startLatLong, finishLatLong=finishLatLong)
