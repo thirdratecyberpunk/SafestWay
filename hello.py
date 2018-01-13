@@ -1,5 +1,7 @@
-from flask import Flask, request, render_template, url_for, redirect
+from flask import Flask, request, render_template, url_for, redirect, g
+import os
 app = Flask(__name__,template_folder='templates')
+print os.environ['MAPPATH']
 
 @app.route("/")
 def hello():
