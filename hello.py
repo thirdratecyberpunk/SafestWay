@@ -20,14 +20,20 @@ def map():
     finishPostcode = urllib2.urlopen("https://api.postcodes.io/postcodes/" + finish).read()
     fpj = json.loads(finishPostcode)
     finishLatLong = {"latitude": fpj["result"]["latitude"], "longitude": fpj["result"]["longitude"]}
+
     # requests a route for the given start and end
-    route = urllib2.urlopen("https://api.mapbox.com/directions/v5/mapbox/walking/"
+    route = json.loads(urllib2.urlopen("https://api.mapbox.com/directions/v5/mapbox/walking/"
     + str(startLatLong["longitude"]) + ","
     + str(startLatLong["latitude"]) + ";"
     + str(finishLatLong["longitude"]) + ","
     + str(finishLatLong["latitude"]) + "?"
     + "alternatives=false&access_token="
-    + "pk.eyJ1IjoibGV3aXNiIiwiYSI6ImNqY2RiaXc3ODBxcXUyeW1tbmdwc2xtZnQifQ.ro-l864DlvMbaZ4Dp5HJ9Q").read()
-    print json.loads(route)
+    + "pk.eyJ1IjoibGV3aXNiIiwiYSI6ImNqY2RiaXc3ODBxcXUyeW1tbmdwc2xtZnQifQ.ro-l864DlvMbaZ4Dp5HJ9Q").read())
+    print route["routes"]
+    # gets crime data for the waypoints in a given route
+    print
+    # https://data.police.uk/api/crimes-street/all-crime?lat=52.629729&lng=-1.131592&date=2017-01
+
+
     # takes the user to the map page
     return render_template('example.html', startLatLong=startLatLong, finishLatLong=finishLatLong)
