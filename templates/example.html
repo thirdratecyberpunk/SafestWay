@@ -15,12 +15,44 @@
 
 <div id='map'></div>
 <script>
+var a = {{ points }};
+var pointPairs = [];
+while(a.length) {
+    pointPairs.push(a.splice(0,2));
+    pointPairs.push(",");
+}
+console.log(pointPairs);
 mapboxgl.accessToken = 'pk.eyJ1IjoibGV3aXNiIiwiYSI6ImNqY2RiaXc3ODBxcXUyeW1tbmdwc2xtZnQifQ.ro-l864DlvMbaZ4Dp5HJ9Q';
 var map = new mapboxgl.Map({
     container: 'map', // container id
     style: 'mapbox://styles/mapbox/dark-v9', //hosted style id
     center: [ {{ startLatLong["longitude"] }}, {{ startLatLong["latitude"] }}], // starting position
     zoom: 15 // starting zoom
+});
+map.on('load', function () {
+  map.addLayer({
+      "id": "route",
+      "type": "line",
+      "source": {
+          "type": "geojson",
+          "data": {
+              "type": "Feature",
+              "properties": {},
+              "geometry": {
+                  "type": "LineString",
+                  "coordinates": pointPairs
+              }
+          }
+      },
+      "layout": {
+          "line-join": "round",
+          "line-cap": "round"
+      },
+      "paint": {
+          "line-color": "#00ff00",
+          "line-width": 8
+      }
+  });
 });
 </script>
 

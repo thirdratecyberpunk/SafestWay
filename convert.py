@@ -60,20 +60,16 @@ def decode(point_str):
         # a round to 6 digits ensures that the floats are the same as when
         # they were encoded
         points.append((round(prev_y, 6), round(prev_x, 6)))
-
     return points
 
-points = decode("knp`IhapJn@pA@tA\\\\CnBN^dBRpA[vAtQLt@lAlCd@fDNbDKjEF|Qk@`[iCa@mAJkFjAeEnBkC?EdBe@pEQ|H@tCsA?kAQg@h@Mz@")
-
-totalCrimeValue = 0
-totalResult = 0
-for i in points:
-    print str(i[0])
-    print str(i[1])
-    result = urllib2.urlopen("https://data.police.uk/api/crimes-at-location?lat=" + str(i[0]) + "&lng=" + str(i[1]) + "&date=2017-01").read()
-    result = json.loads(result)
-    totalResult += len(result)
-print str(totalResult)
-print str(len(points))
-averageCrime = totalResult/ len(points)
-print str(averageCrime)
+# returns a mean average of the amount of crimes relative to the number of streets between two nodes given a polyline string
+def getCrimeRateOfRoute(polyline):
+    points = decode(polyline)
+    totalCrimeValue = 0
+    totalResult = 0
+    for i in points:
+        result = urllib2.urlopen("https://data.police.uk/api/crimes-at-location?lat=" + str(i[0]) + "&lng=" + str(i[1]) + "&date=2017-01").read()
+        result = json.loads(result)
+        totalResult += len(result)
+    averageCrime = totalResult/ len(points)
+    return averageCrime

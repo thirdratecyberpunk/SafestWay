@@ -2,6 +2,7 @@ from flask import Flask, request, render_template, url_for, redirect, g
 import os
 import urllib2
 import json
+from convert import getCrimeRateOfRoute, decode
 app = Flask(__name__,template_folder='templates')
 api_key = os.environ['MAPPATH']
 
@@ -22,18 +23,25 @@ def map():
     finishLatLong = {"latitude": fpj["result"]["latitude"], "longitude": fpj["result"]["longitude"]}
 
     # requests a route for the given start and end
-    route = json.loads(urllib2.urlopen("https://api.mapbox.com/directions/v5/mapbox/walking/"
+    route = urllib2.urlopen("https://api.mapbox.com/directions/v5/mapbox/walking/"
     + str(startLatLong["longitude"]) + ","
     + str(startLatLong["latitude"]) + ";"
     + str(finishLatLong["longitude"]) + ","
     + str(finishLatLong["latitude"]) + "?"
     + "alternatives=false&access_token="
-    + "pk.eyJ1IjoibGV3aXNiIiwiYSI6ImNqY2RiaXc3ODBxcXUyeW1tbmdwc2xtZnQifQ.ro-l864DlvMbaZ4Dp5HJ9Q").read())
-    print route["routes"]
+    + "pk.eyJ1IjoibGV3aXNiIiwiYSI6ImNqY2RiaXc3ODBxcXUyeW1tbmdwc2xtZnQifQ.ro-l864DlvMbaZ4Dp5HJ9Q").read()
+    route = json.loads(route)
+    polyline = route["routes"][0]["geometry"]
+
+    # gets a list of all streets
+    points = decode(polyline)
+    print "points: " + str(points)
+    x = []
+    for item in points:
+        x.extend(item)
+
     # gets crime data for the waypoints in a given route
-    print
-    # https://data.police.uk/api/crimes-street/all-crime?lat=52.629729&lng=-1.131592&date=2017-01
-
-
+    crimevalue = getCrimeRateOfRoute(polyline)
+    print "crimevalue: " + str(crimevalue)
     # takes the user to the map page
-    return render_template('example.html', startLatLong=startLatLong, finishLatLong=finishLatLong)
+    return render_template('example.html', startLatLong=startLatLong, finishLatLong=finishLatLong, points=x)
