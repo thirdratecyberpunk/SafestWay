@@ -73,3 +73,14 @@ def getCrimeRateOfRoute(polyline):
         totalResult += len(result)
     averageCrime = totalResult/ len(points)
     return averageCrime
+
+# returns a string hexadecimal value based on the average number of crimes in a route
+def getCrimeColour(crimerate):
+    if 0 <= crimerate < 5:
+        return "#00FF00"
+    elif 5 < crimerate < 10:
+        return "#FFFF00"
+    elif 10 < crimerate < 15:
+        return "#FFA500"
+    else:
+        return '#FF0000'

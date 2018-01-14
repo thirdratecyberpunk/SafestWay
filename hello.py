@@ -2,7 +2,7 @@ from flask import Flask, request, render_template, url_for, redirect, g
 import os
 import urllib2
 import json
-from convert import getCrimeRateOfRoute, decode
+from convert import getCrimeRateOfRoute, decode, getCrimeColour
 app = Flask(__name__,template_folder='templates')
 api_key = os.environ['MAPPATH']
 
@@ -35,13 +35,14 @@ def map():
 
     # gets a list of all streets
     points = decode(polyline)
-    print "points: " + str(points)
     x = []
     for item in points:
         x.extend(item)
 
     # gets crime data for the waypoints in a given route
     crimevalue = getCrimeRateOfRoute(polyline)
-    print "crimevalue: " + str(crimevalue)
+    # retrieves the colour of the crimeline
+    colour = getCrimeColour(crimevalue)
+    print colour
     # takes the user to the map page
-    return render_template('example.html', startLatLong=startLatLong, finishLatLong=finishLatLong, points=x)
+    return render_template('example.html', startLatLong=startLatLong, finishLatLong=finishLatLong, points=x, colour=colour)
